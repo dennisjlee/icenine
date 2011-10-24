@@ -1,0 +1,20 @@
+{% extends "files_render_hi.djhtml" %}
+
+{% block includes %}
+  {{ block.super }}
+  <script type="text/javascript" src="/include/js/wz_tooltip.js"></script>
+{% endblock %}
+
+{% block file_thumb_extra_attrs %}
+keywords="{{ file.movie.readable_keywords }}"
+rating="{{ file.movie.rating|floatformat:1 }}"
+infolink="{{ file.get_info_link }}"
+onmouseover="return escape(makeMovieTooltip(this))"
+{% endblock %}
+
+{% block file_text_extra_attrs %}
+keywords="{{ file.movie.readable_keywords }}"
+rating="{{ file.movie.rating|floatformat:1 }}"
+infolink="{{ file.get_info_link }}"
+onmouseover="return escape(makeMovieTooltip(this))"
+{% endblock %}

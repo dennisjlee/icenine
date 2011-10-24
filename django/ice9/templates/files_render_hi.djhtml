@@ -1,0 +1,111 @@
+{% extends "files_render_base.djhtml" %}
+{% comment %}
+
+files_render_hi.djhtml
+Copyright 2007 DJ Lee
+
+The base template for rendering file-viewing pages in thumbnail view in icenine.
+
+Parameters:
+
+  paths_zipped: see files_render_base
+  directory: a models.Directory object
+  subdirs: a list of models.Directory objects
+  files: a list of models.File objects
+
+{% endcomment %}
+
+
+{% load icenine_extras %}
+
+{% block includes %}
+  {{ block.super }}
+{% endblock %}
+
+{% block topbar_path_link %}{{ dir_path.1 }}?hi{% endblock %}
+
+{% block topbar_left_link %}<a class="path" href=".">Text-only view</a>{% endblock %}
+
+{% block main %}
+  <div style="width: 100%; text-align: center">
+  <!-- START OF THUMBNAIL IMAGES -->
+    {% spaceless %}
+    <table border="0" cellspacing="0" cellpadding="0" style="width: 95%; margin-left: auto; margin-right: auto;">
+
+    {# render subdirs in rows of 5 #}
+    {# thumbs are rendered in a separate row from text for alignment #}
+    {% for subdir_row in subdirs|chunk_list:"5" %}
+      <tr>
+      {% for subdir in subdir_row %}
+
+        {% block subdir_thumb %}
+          <td class="thumb">
+            <a href="{{ subdir.name }}/?hi" title="{{ subdir.label }}"{% block subdir_thumb_extra_attrs %}{% endblock %}><!--
+            --><img class="t" src="{{ subdir.thumb_image }}" alt="{{ subdir.label }}"/><!--
+         --></a>
+          </td>
+        {% endblock %}
+
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for subdir in subdir_row %}
+
+        {% block subdir_text %}
+          <td class="links">
+            <a href="{{ subdir.name }}/?hi" title="{{ subdir.label }}" class="note"{% block subdir_text_extra_attrs %}{% endblock %}><!--
+           -->{{ subdir.label }}</a><!--
+         -->{% if subdir.get_info_link %}<!--
+           -->&nbsp;<a class="smallcomment" target="_blank" href="{{ subdir.get_info_link }}">(info)</a>
+            {% endif %}
+          </td>
+        {% endblock %}
+
+      {% endfor %}
+      </tr>
+    {% endfor %}
+
+    {% if subdirs and files %}
+      <tr><td height="10" colspan="5"><hr></td></tr>
+    {% endif %}
+
+    {# render files in rows of 5 #}
+    {# thumbs are rendered in a separate row from text for alignment #}
+    {% for file_row in files|chunk_list:"5" %}
+      <tr>
+      {% for file in file_row %}
+
+        {% block file_thumb %}
+          <td class="thumb">
+            <a onclick="return openMovie('{{ file.path|addslashes }}')" href="{{ file.name|urlencode }}" title="{{ file.label }}" {% block file_thumb_extra_attrs %}{% endblock %} ><!--
+            --><img class="t" src="{{ file.thumb_image|urlencode }}" alt="{{ file.label }}"/><!--
+         --></a>
+         </td>
+        {% endblock %}
+
+      {% endfor %}
+      </tr>
+      <tr>
+      {% for file in file_row %}
+
+        {% block file_text %}
+          <td class="links">
+            <a onclick="return openMovie('{{ file.path|addslashes }}')" href="{{ file.name|urlencode }}" title="{{ file.label }}" class="note"{% block file_text_extra_attrs %}{% endblock %} ><!--
+            -->{{ file.label }}</a><!--
+         -->{% if file.get_info_link %}<!--
+            -->&nbsp;<a class="smallcomment" target="_blank" href="{{ file.get_info_link }}">(info)</a>
+            {% endif %}
+          </td>
+        {% endblock %}
+
+      {% endfor %}
+      </tr>
+    {% endfor %}
+
+    </table>
+    {% endspaceless %}
+
+  </div>
+
+  <script type="text/javascript" src="/include/js/wz_tooltip.js"></script>
+{% endblock %}

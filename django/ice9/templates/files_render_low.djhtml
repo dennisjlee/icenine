@@ -1,0 +1,176 @@
+{% extends "files_render_base.djhtml" %}
+
+{% comment %}
+
+files_render_low.djhtml
+Copyright 2007 DJ Lee
+
+The base template for rendering file-viewing pages in text-only view in icenine.
+
+Parameters:
+
+  paths_zipped: see files_render_base
+  directory: a models.Directory object
+  subdirs: a list of models.Directory objects
+  files: a list of models.File objects
+
+{% endcomment %}
+
+
+{% block includes %}
+  {{ block.super }}
+<script type="text/javascript" src="/include/js/sorttable.js"></script>
+<style type="text/css">
+<!--
+
+/* Sortable tables */
+table.sortable a.sortheader {
+    color: #9999ff;
+    text-decoration: none;
+    font-weight: normal;
+    display: block;
+}
+table.sortable span.sortarrow {
+    color: #9999ff;
+    font-weight: bold;
+}
+
+/* Style for small comments */
+/*
+.smallcomment {
+	color: #888888;
+	font-size: 10px;
+}
+A.smallcomment:hover { text-decoration: none; }
+A.smallcomment:visited { color: #888888; }
+*/
+
+/*
+ * Style for navigation bar on left (no longer there 20080414)
+div#navigation {
+    clear: left;
+    float: left;
+    margin: 0px 0px 0px 10px;
+    height: 100%; 
+    font: 131% Trebuchet MS, Verdana, Arial, Helvetica;
+    font-weight: bold;
+}
+
+div#navigation a {
+    display: block; 
+    text-align: center; 
+    padding: 5px 10px; 
+    margin: 10px 0px 10px; 
+    border-top: 1px black; 
+    border-bottom: 1px black; 
+    text-decoration: none; 
+    color: #9999FF; 
+}
+
+div#navigation a:hover {
+    color: #111111; 
+    background-color: #9999FF;
+}
+
+div#navigation a.highlight { color: #FFFFFF; }
+*/
+
+a.directory {
+  font: 125% Trebuchet MS, Verdana, Arial, Helvetica;
+  font-weight: bold;
+}
+
+a.directory:hover {
+    color: #111111; 
+    background-color: #9999FF;
+}
+
+
+td { 
+  height: auto;
+}
+
+-->
+</style>
+{% endblock %}
+
+{% block topbar_path_link %}{{ dir_path.1 }}{% endblock %}
+
+{% block topbar_left_link %}<a class="path" href="?hi">Thumbnail view</a>{% endblock %}
+
+{% block main %}
+
+  <div class="center">
+    <a href="/"><img src="/include/images/icenine.png" border="0" alt="icenine"/></a>
+  </div>
+  <br/>
+
+{%comment%}
+  {% block sidebar %}
+    <div id="navigation">
+    {% ifnotequal directory.name '/' %}
+      <a href="..">Up one level &uarr; </a>
+    {% endifnotequal %}
+
+    {# display subdirectories #}
+    {% for subdir in subdirs %}
+      <a href="{{ subdir.name }}/">{{ subdir.label }}</a>
+    {% endfor %}
+    </div>
+  {% endblock %}
+{%endcomment%}
+
+  <table class="sortable" id="movies_table" border="0" cellpadding="4" style="margin-left: 15%; margin-right: 15%;">
+    <tr style="height: auto">
+      {% block table_header %}
+      <th>Filename (info)</th>
+      <th style="width: 10%">Size</th>
+      <th style="width: 15%">Addition Date</th>
+      {% endblock %}
+    </tr>  
+
+    {% block directories %}
+      {% ifnotequal directory.name '/' %}
+      <tr>
+        <td><a class="directory" href="..">Up one level &uarr; </a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        </tr>
+      {% endifnotequal %}
+
+      {# display subdirectories #}
+      {% for subdir in subdirs %}
+      <tr>
+        <td><a class="directory" href="{{ subdir.name }}/">{{ subdir.label }}</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endfor %}
+    {% endblock %}
+
+    {% for file in files %}
+      <tr id="file.{{ forloop.counter }}">
+      {% block table_row %}
+        <td>
+		  {% block file_cell %}
+            {# don't want extraneous spaces between two links below #} 
+            <a onclick="return openMovie('{{ file.path|addslashes }}')" href="{{ file.absolute_path|urlencode }}">{{ file.name|escape }}</a><!--
+           -->{% if file.get_info_link %}<!--
+             -->&nbsp;<a class="smallcomment" target="_blank" href="{{ file.get_info_link }}">(?)</a>
+             {% endif %}
+		  {% endblock %}
+        </td>
+        <td style="white-space:nowrap">{{ file.size|filesizeformat }}</td>
+        <td style="white-space:nowrap">{{ file.addition_date|date:"Y-m-d" }}</td>
+      {% endblock %}
+      </tr>
+    {% endfor %}
+
+  </table>
+  <br/>
+
+{% endblock %}

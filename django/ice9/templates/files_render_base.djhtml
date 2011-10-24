@@ -1,0 +1,69 @@
+{% comment %}
+
+files_render_base.djhtml
+Copyright 2007 DJ Lee
+
+The base template for rendering file-viewing pages in icenine.
+
+Parameters:
+
+  paths_zipped: a zipped lists mapping directory names to full paths, like 'foo' to '/tv/foo/'
+      Should contain all the paths starting from the root descending down to the
+      current directory.  For instance, if we're in the /tv/foo/bar/
+      directory, paths_zipped should be
+        [ ('tv', '/tv/'), ('foo', '/tv/foo/'), ('bar', '/tv/foo/bar/') ]
+
+{% endcomment %}
+
+{% load icenine_extras %}
+
+<!DOCTYPE html>
+{% spaceless %}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>icenine | {% block title %}{{ paths_zipped|unzip|first|join:" | "|remove_underscores }}{% endblock %}</title>
+
+{% block includes %}
+<link rel="shortcut icon" href="/include/favicon.ico">
+<link rel="stylesheet" href="/include/icenine.css"/>
+{# style, Black.css or White.css #}
+<link rel="stylesheet" href="/include/res/styles/Black.css"/>
+<script type="text/javascript" src="/include/js/common.js"></script>
+{% endblock %}
+</head>
+
+<body id="body">
+  {% block topbar %}
+  <div class="topbar" style="position: fixed; width: 100%">
+    <div style="padding: 3px 0 0 3px; text-align: center">
+      <span style="float: right; width: 15%; text-align: right; padding-right: 5px">
+        &nbsp;
+        {% block topbar_right_content %}
+          &rarr;&nbsp;{% block topbar_left_link %}<a class="path" href="#">OVERRIDE ME!</a>{% endblock %}
+        {% endblock %}
+      </span>
+      <span style="float: left; width: 15%">&nbsp;</span>
+      <span class="bpppath">
+        {# iterate over paths, rendering the values as links and keys as link text #}
+        <a class="path" href="/">icenine</a>{% block topbar_center_content %}<!--
+        -->{% for dir_path in paths_zipped %}<!--
+          -->&nbsp;&#xbb;&nbsp;<a class="path" href="{% block topbar_path_link %}OVERRIDE ME!{% endblock %}"><!--
+            -->{{ dir_path.0|remove_underscores }}</a><!--
+        -->{% endfor %}
+        {% endblock %}
+      </span>
+    </div>
+  </div>
+
+  <!-- <div/> doesn't seem to work in quirks mode (or non XHTML 1.1?) -->
+  <div style="padding: 20px"></div>
+  {% endblock %}
+
+  {# put the meat in this block #}
+  {% block main %}
+  {% endblock %}
+  <div class="bottomruler flushbottom"/>
+</body>
+</html>
+{% endspaceless %}
