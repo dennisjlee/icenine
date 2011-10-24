@@ -18,6 +18,10 @@ def make_movie_thumb(frames_file, thumb_file, video_file, conf):
   thumb = open(thumb_file, 'w')
   thumb.close()
 
+  # TODO(djlee): on windows, the subprocess calls to midentify and mplayer
+  # fail for files with unicode characters - see
+  # http://bugs.python.org/issue1759845 which is basically WillNotFix.
+  # Apparently fixed in Python 3+, but django is not compatible with Python 3 :(
   try:
     midentify_cmd = u'%s "%s"' % (icenine.ice9.conf.MIDENTIFY, video_file)
     midentify_pipe = subprocess.Popen(midentify_cmd,

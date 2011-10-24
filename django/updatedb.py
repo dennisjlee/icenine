@@ -109,13 +109,6 @@ def process_files(conf, root, curdir, files):
     # TODO fix this copout, find out how the extra slash actually sneaks in ..
     absolute_path = (curdir + '/' + file).replace('//', '/')
 
-    # TODO(djlee): there is something wrong with the encoding that is passed to
-    # MySQL.  perhaps a Django or MySQLdb setting.  effect is that INSERTs with 
-    # accented characters fail.
-
-    # convert Windows Latin-1 encoding to UTF8, which is what MySQL expects
-    #file = unicode(file, 'iso-8859-1').encode('utf-8')
-
     if relative_path == "":
       relative_file_path = file
     else:
