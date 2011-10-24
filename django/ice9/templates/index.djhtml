@@ -1,0 +1,152 @@
+<html>
+<head>
+<title>icenine v2</title>
+<link rel="shortcut icon" href="/include/favicon.ico">
+<link rel="stylesheet" href="/include/icenine.css">
+  <style type="text/css">
+<!--
+body {position: relative; background: black }
+
+hr { color: #333333; }
+
+#container {
+    width: 90%;
+    margin: 5% 5% 5% 5%;
+    padding-top: 10%;
+    border: none;
+}
+
+#top {
+    padding: .5em;
+}
+
+div#topspacer { float: left; width: 120px; }
+div#icenine {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+/*  padding-top: 20px; */
+  padding-bottom: 30px;
+}
+div#fortune {
+    float: left; border-top: solid #999999 2px; border-bottom: solid #333333 2px; 
+    width: 250px;
+    height: 88px; /* applies to IE6 */
+}
+html>body div#fortune {height: 80px;} /* applies to firefox, opera */
+
+div#fortune p { padding: 10px; vertical-align: center }
+html>body div#fortune p { padding: 0px; }
+
+div#navigation {
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px; 
+    font: 220% Trebuchet MS, Verdana, Arial, Helvetica;
+    font-weight: bold;
+    background: #141414;
+}
+
+div#navigation a {
+    display: block; 
+    text-align: center; 
+    padding: 5px 10px 10px 5px; 
+    margin: 0 0 1px; 
+    border-top: 1px black; 
+    border-bottom: 1px black; 
+    text-decoration: none; 
+    color: #9999FF; 
+}
+
+div#navigation a:hover {
+    color: #111111; 
+    background: #AAAAAA;
+    background: #9999FF;
+}
+
+div#navigation a.highlight { color: #FFFFFF; }
+
+b.rtop, b.rbottom{display:block;background: black}
+b.rtop b, b.rbottom b{display:block;height: 1px;
+    overflow: hidden; background: #141414}
+b.r1{margin: 0 5px}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+
+div#content {
+    margin: 20px 0 0 160px;
+    width: 500px;
+}
+html>body div#content { margin: 100px 0 0 160px; }
+
+div#movies {
+    float: left;
+    padding-top: 30px;
+    padding-left: 80px;
+    font: 105% Trebuchet MS, Verdana, Arial, Helvetica;
+    font-weight: bold;
+}
+div#movies a {
+    display: block; 
+    text-align: center; 
+}
+
+div#tv {
+    float: right;
+    padding-top: 30px;
+    padding-right: 80px;
+    font: 105% Trebuchet MS, Verdana, Arial, Helvetica;
+    font-weight: bold;
+}
+div#tv a {
+    display: block; 
+    text-align: center; 
+}
+
+   -->
+  </style>
+</head>
+<body>
+
+
+<div id="container">
+
+  <div id="icenine">
+    <a href="/"><img src="/include/images/icenine.png" border=0></a>
+  </div>
+    </p>
+
+
+<div id="navigation">
+<b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
+<a href="tv/?hi">tv</a>
+<a href="movies/?hi">movies</a>
+<a href="software/?hi">software</a>
+<a href="recent">recent</a>
+<!--
+<a href="search">search</a>
+<a href="popular">popular</a>
+-->
+{% comment %}
+    <? if ($COOKIE_email == "dlee@fas.harvard.edu") { ?>
+         <a class="highlight" href="logs.php">logs</a>
+    <? } ?>
+<? } else { ?>
+<a class="highlight" href="unlock.php">unlock</a>
+<? } ?>
+<a href="faq.php">faq</a>
+<? if ($authport) { ?>
+<hr>
+<? include "include/paypal.inc" ?>
+<? } ?>
+{% endcomment %}
+<b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
+</div> 
+
+
+
+</div>
+
+</body>
+</html>

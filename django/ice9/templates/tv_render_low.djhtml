@@ -1,0 +1,2 @@
+{% block subdir_default_info_link %}&nbsp;<a class="smallcomment" target="_blank" 
+  href="http://www.google.com/search?q=site%3Aepguides.com&q={{ subdir.label|urlencode }}?btnI=I'm+Feeling+Lucky">(info)</a>{% endblock %}

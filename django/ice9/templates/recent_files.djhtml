@@ -1,0 +1,19 @@
+{% extends "files_render_low.djhtml" %}
+
+{% load icenine_extras %}
+
+{% block title %}recent files{% endblock %}
+
+{% block topbar_right_content %}{% endblock %}
+
+{% block topbar_center_content %}&nbsp;&#xbb;&nbsp;<a class="path" href="/recent">recent files</a>{% endblock %}
+
+{% block directories %}{% endblock %}
+
+{% comment %}
+  TODO(djlee): javascript to make this appear only on hover, like mininova
+{% endcomment %}
+{% block file_cell %}
+  {{ block.super }}
+  <small class="grayText">&nbsp;in <a href="{{ file.directory.absolute_path }}/">{{ file.directory.friendly_label }}</a></small>
+{% endblock %}
