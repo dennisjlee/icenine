@@ -1,4 +1,4 @@
 *.pyc
-/django/settings.py
+/icenine/settings.py
 Thumbs.db
 .DS_Store
