@@ -1,6 +1,7 @@
 from django.template.defaultfilters import urlencode
 
 ROOT = 'c:/Inetpub'
+DJANGO_ROOT = 'c:/Inetpub/django'
 
 TEMP_DIR = 'c:/cygwin/tmp'
 MPLAYER = 'c:/Progra~1/SMPlayer/mplayer/mplayer.exe'
