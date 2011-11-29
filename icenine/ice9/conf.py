@@ -1,7 +1,6 @@
 from django.template.defaultfilters import urlencode
 
 ROOT = 'c:/Inetpub'
-DJANGO_ROOT = 'c:/Inetpub/django'
 
 TEMP_DIR = 'c:/cygwin/tmp'
 MPLAYER = 'c:/Progra~1/SMPlayer/mplayer/mplayer.exe'
@@ -57,7 +56,6 @@ class TVConf(DirConf):
     DirConf.__init__(self,
       type = 'tv',
       local_fileroot = ['%s:/tv' % x for x in ['c','d','e','g','h','i','j','k']],
-      #[ 'c:/tv', 'd:/tv', 'e:/tv', 'h:/tv', 'i:/tv', 'j:/tv', 'k:/tv'  ],
       local_thumbroot = ROOT + '/static/thumbs/tv',
       webroot = '/tv',
       section = 'tv',
