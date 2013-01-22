@@ -1,5 +1,7 @@
 from django.conf.urls.defaults import *
-from icenine.ice9.conf import ROOT, DJANGO_ROOT
+from icenine.ice9.conf import init_config, ROOT
+
+init_config()
 
 urlpatterns = patterns('',
     # Example:
