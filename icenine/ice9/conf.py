@@ -1,3 +1,4 @@
+from os import path
 from configobj import ConfigObj, flatten_errors
 from django.template.defaultfilters import urlencode
 from validate import Validator
@@ -15,7 +16,9 @@ DIR_CONF = {}
 
 def init_config():
   "Initialize config from config.ini file and configspec.ini template file."
-  config = ConfigObj('config.ini', configspec='configspec.ini')
+  dir = path.dirname(__file__)
+  config = ConfigObj(path.join(dir, 'config.ini'),
+                     configspec=path.join(dir, 'configspec.ini'))
   validator = Validator()
   results = config.validate(validator)
 
@@ -31,16 +34,16 @@ def init_config():
   MIDENTIFY = _MIDENTIFY_TEMPLATE % MPLAYER
   IMAGEMAGICK_CONVERT = config['imagemagick_convert']
 
-  DIR_CONF['tv'] = TVConf(config)
-  DIR_CONF['movie'] = MovieConf(config)
+  DIR_CONF['tv'] = TVConf(config['directories'])
+  DIR_CONF['movie'] = MovieConf(config['directories'])
 
 
 class DirConf:
   def __init__(self, 
+               config,
                type = '',
                webroot = '',
-               section = '',
-               config):
+               section = ''):
 
     self.type = type 
     self.webroot = webroot

@@ -7,8 +7,7 @@ import math, os, re
 
 CATEGORY_CHOICES = (
     ('movie', 'Movie'),
-    ('tv', 'TV'),
-    ('software', 'Software')
+    ('tv', 'TV')
 )
 
 # BigIntegerField class taken from http://code.djangoproject.com/ticket/399
