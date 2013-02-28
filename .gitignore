@@ -2,3 +2,5 @@
 /icenine/settings.py
 Thumbs.db
 .DS_Store
+.*.swp
+.*.swo
