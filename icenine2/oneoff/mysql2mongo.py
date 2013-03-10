@@ -30,7 +30,7 @@ def main(args):
           dir.parent_id)
   db.directories.ensure_index([('type', ASCENDING), ('relative_path', ASCENDING)],
       unique=True, dropDups=True)
-  db.directories.ensure_index([('parent_id', ASCENDING), ('name', ASCENDING)],
+  db.directories.ensure_index([('type', ASCENDING), ('parent_id', ASCENDING), ('name', ASCENDING)],
       unique=True, dropDups=True)
 
   db.files.drop()
@@ -59,7 +59,7 @@ def main(args):
     else:
       print 'File %s, parent directory %d does not exist in Mongo!' % (file.relative_path,
           file.directory_id)
-  db.files.ensure_index([('parent_id', ASCENDING), ('name', ASCENDING)],
+  db.files.ensure_index([('type', ASCENDING), ('parent_id', ASCENDING), ('name', ASCENDING)],
       unique=True, dropDups=True)
   db.files.ensure_index([('addition_date', DESCENDING)])
 
