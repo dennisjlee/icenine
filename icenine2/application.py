@@ -6,13 +6,18 @@ from bson import json_util
 import json
 
 app = Flask(__name__)
-app.config['MONGO_DBNAME'] = 'icenine'
+app.config.from_object('icenine2.settings')
+app.config.from_envvar('ICENINE_SETTINGS')
+
 mongo = PyMongo(app)
 
-@app.route("/")
-def index():
-  return render_template('index.html', static_prefix=url_for('static',
-    filename=''))
+@app.route("/", defaults={'path': None})
+@app.route("/tv/<path:path>")
+@app.route("/movies/<path:path>")
+def index(path):
+  return render_template('index.html',
+      static_prefix=url_for('static', filename=''),
+      use_cdn=app.config['USE_CDN'])
 
 def mongo_jsonify(doc):
   return app.response_class(

@@ -2,7 +2,11 @@
 <html>
   <head>
     <title>icenine</title>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    {% if use_cdn %}
+      <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    {% else %}
+      <link href="{{ static_prefix }}css/bootstrap.min.css" rel="stylesheet" media="screen">
+    {% endif %}
   </head>
   <body>
     <div class="container">
@@ -11,8 +15,20 @@
         <div class="span4"><h1>Hello, world!</h1></div>
         <div class="span4"></div>
       </div>
-  </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    </div>
+    {% if use_cdn %}
+      <-- TODO: find a CDN for zepto and update bootstrap JS to a zepto-compatible version -->
+      <-- TODO: find a CDN for underscore and backbone -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    {% else %}
+      <script src="{{ static_prefix }}js/zepto.min.js"></script>
+      <script src="{{ static_prefix }}js/underscore-min.js"></script>
+      <script src="{{ static_prefix }}js/backbone-min.js"></script>
+      <script> window.jQuery = $; </script>
+      <script src="{{ static_prefix }}js/bootstrap.min.js"></script>
+    {% endif %}
+    <script src="{{ static_prefix }}js/json2.js"></script>
+    <script src="{{ static_prefix }}js/icenine.js"></script>
   </body>
 </html>
