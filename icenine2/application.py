@@ -49,22 +49,29 @@ def metadata_api(filetype, path):
         path, 'found': True})
     return mongo_jsonify(d)
 
-EXCLUDE_FIELDS = {'type': False, 'parent_id': False, 'found': False}
+EXCLUDE_FIELDS = {'parent_id': False, 'found': False}
 
 # TODO: id parsing below may need to change when using Mongo-generated object
 # ids instead of mysql-generated numeric ids
 
 @app.route('/api/subdirs/<int:parent_id>')
 def subdirs_api(parent_id):
-  return mongo_jsonify(list(mongo.db.directories.find(
-      {'parent_id': parent_id, 'found': True},
-      EXCLUDE_FIELDS)))
+  return mongo_jsonify(fetch_entities(mongo.db.directories, parent_id))
 
 @app.route('/api/files/<int:parent_id>')
 def files_api(parent_id):
-  return mongo_jsonify(list(mongo.db.files.find(
-      {'parent_id': parent_id, 'found': True},
-      EXCLUDE_FIELDS)))
+  return mongo_jsonify(fetch_entities(mongo.db.files, parent_id))
+
+def fetch_entities(table, parent_id):
+  entities = list(table.find({'parent_id': parent_id, 'found': True},
+      EXCLUDE_FIELDS))
+  for e in entities:
+    e['thumb_path'] = url_for('static',
+        filename=('thumbs/' + e['type'] + '/' + e['relative_path'] + '.jpg'))
+    print e['thumb_path']
+    del e['relative_path']
+    del e['type']
+  return entities
 
 if __name__ == '__main__':
   app.run(debug=True)
