@@ -1,0 +1,30 @@
+doctype
+html
+  head
+    title icenine
+    if use_cdn
+      link(href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css", rel="stylesheet", media="screen")
+    else
+      link(href="#{static_prefix}css/bootstrap.min.css", rel="stylesheet", media="screen")
+  body
+    .container
+      .row
+        .span4
+        #content.span4
+        .span4
+    if use_cdn
+      //- TODO: find a CDN for zepto and update bootstrap JS to a zepto-compatible version
+      //- TODO: find a CDN for underscore and backbone
+      script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+      script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
+    else
+      script(src="#{static_prefix}js/zepto.min.js")
+      script(src="#{static_prefix}js/underscore-min.js")
+      script(src="#{static_prefix}js/backbone.js")
+      script
+        window.jQuery = $; 
+      script(src="#{static_prefix}js/bootstrap.min.js")
+
+    script(src="#{static_prefix}js/json2.js")
+    script(src="#{static_prefix}js/icenine.js")
+

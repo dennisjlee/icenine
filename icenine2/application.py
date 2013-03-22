@@ -8,12 +8,14 @@ import json
 app = Flask(__name__)
 app.config.from_object('icenine2.settings')
 app.config.from_envvar('ICENINE_SETTINGS')
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
 mongo = PyMongo(app)
 
 @app.route('/', defaults={'path': None})
 def index(path):
-  return render_template('index.html',
+  # TODO: render json for initial bootstrap
+  return render_template('index.jade',
       static_prefix=url_for('static', filename=''),
       use_cdn=app.config['USE_CDN'])
 
