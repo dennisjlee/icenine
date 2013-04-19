@@ -21,11 +21,7 @@ var File = Backbone.Model.extend({
   }
 });
 
-var Directory = Backbone.Model.extend({
-  idAttribute: "_id",
-  url: function() {
-    return '/api/metadata/' + this.fullPath();
-  },
+var Directory = File.extend({
   fullPath: function() {
     return this.get('type') + '/' + this.get('relative_path') +
         ((this.get('relative_path') != '') ? '/' : '');
@@ -100,14 +96,14 @@ var IcenineRouter = Backbone.Router.extend({
     $('#content').append(indexView.el);
   },
 
-  tv: function(path) {
+  _renderDirectory: function(type, path) {
     if (path == '') path = '/';
     if (path[path.length - 1] == '/') {
       if (!(curDir &&
-          curDir.get('type') == 'tv' &&
+          curDir.get('type') == type &&
           curDir.get('relative_path') == path)) {
         curDir = new Directory({
-          'type': 'tv',
+          'type': type,
           'relative_path': path.substr(0, path.length - 1)
         });
         curDir.fetch();
@@ -125,8 +121,12 @@ var IcenineRouter = Backbone.Router.extend({
     }
   },
 
+  tv: function(path) {
+    this._renderDirectory('tv', path);
+  },
+
   movies: function(path) {
-    console.log('navigated to movies with path ' + path);
+    this._renderDirectory('movie', path);
   }
 
 });
