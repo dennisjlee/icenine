@@ -1,0 +1,12 @@
+.thumbs {
+  > div {
+    display: inline-block;
+    background-color: #ddd;
+    margin: 10px;
+    width: 130px;
+  }
+
+  img {
+    display: block;
+  }
+}

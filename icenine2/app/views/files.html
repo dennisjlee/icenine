@@ -1,0 +1,22 @@
+<header>
+  <a href="#/">icenine</a>
+  <span ng-repeat="component in explodedComponents">
+    | <a href="#{{component.path}}/">{{component.name}}</a>
+  </span>
+</header>
+
+<section class="thumbs">
+  <div class="dir" ng-repeat="subdir in subdirs">
+    <a href="#/{{type}}{{path}}{{subdir.name}}/">
+      <img ng-src="{{subdir.thumb_path}}"></img>
+      {{subdir.name}}
+    </a>
+  </div>
+</section>
+
+<section class="thumbs">
+  <div class="file" ng-repeat="file in files">
+    <img ng-src="{{file.thumb_path}}"></img>
+    {{file.name}}
+  </div>
+</section>

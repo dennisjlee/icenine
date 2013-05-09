@@ -1,23 +1,33 @@
 #!/usr/bin/env python
 
-from flask import Flask, abort, render_template, request, url_for
-from flask.ext.pymongo import PyMongo
-from bson import json_util
 import json
 
-app = Flask(__name__)
+from bson import json_util
+from flask import (Flask, abort, render_template, request, send_file,
+                   send_from_directory, url_for)
+from flask.ext.pymongo import PyMongo
+from flask.ext.scss import Scss
+from pymongo import ASCENDING, DESCENDING
+
+app = Flask(__name__, static_folder='app')
 app.config.from_object('icenine2.settings')
 app.config.from_envvar('ICENINE_SETTINGS')
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
 mongo = PyMongo(app)
+Scss(app, static_dir=app.static_folder + '/css', asset_dir=app.static_folder)
 
 @app.route('/', defaults={'path': None})
 def index(path):
   # TODO: render json for initial bootstrap
-  return render_template('index.jade',
-      static_prefix=url_for('static', filename=''),
-      use_cdn=app.config['USE_CDN'])
+  return send_file('app/index.html')
+
+@app.route('/components/<path:path>')
+@app.route('/scripts/<path:path>')
+@app.route('/css/<path:path>')
+@app.route('/views/<path:path>')
+def static_from_root(path):
+    return send_from_directory(app.static_folder, request.path[1:])
 
 # Note: tv and movies need separate routes to avoid redirecting from /tv/ to
 # /movies/
@@ -53,26 +63,36 @@ def metadata_api(filetype, path):
 
 EXCLUDE_FIELDS = {'parent_id': False, 'found': False}
 
-# TODO: id parsing below may need to change when using Mongo-generated object
-# ids instead of mysql-generated numeric ids
+class EntityTypes:
+  FILE = 'file'
+  DIRECTORY = 'directory'
 
-@app.route('/api/subdirs/<int:parent_id>')
-def subdirs_api(parent_id):
-  return mongo_jsonify(fetch_entities(mongo.db.directories, parent_id))
+@app.route('/api/children/<parent_id>')
+def children_api(parent_id):
+  children = fetch_entities(EntityTypes.DIRECTORY, parent_id)
+  children.extend(fetch_entities(EntityTypes.FILE, parent_id))
+  return mongo_jsonify(children)
 
-@app.route('/api/files/<int:parent_id>')
-def files_api(parent_id):
-  return mongo_jsonify(fetch_entities(mongo.db.files, parent_id))
-
-def fetch_entities(table, parent_id):
-  entities = list(table.find({'parent_id': parent_id, 'found': True},
-      EXCLUDE_FIELDS))
+def fetch_entities(entity_type, parent_id, sort=('name', ASCENDING)):
+  try:
+    # parent_id could be int (legacy from sql) or mongo id
+    int_parent_id = int(parent_id)
+    parent_id = int_parent_id
+  except ValueError:
+    pass
+  table = mongo.db.files if entity_type is EntityTypes.FILE else mongo.db.directories
+  # TODO: perhaps use `skip` keyword to deal w/ paging
+  entities = list(
+      table.find({'parent_id': parent_id, 'found': True}, EXCLUDE_FIELDS)
+          .sort(*sort))
   for e in entities:
+    # TODO: validate thumb path or make it live in the db
     e['thumb_path'] = url_for('static',
         filename=('thumbs/' + e['type'] + '/' + e['relative_path'] + '.jpg'))
-    print e['thumb_path']
     del e['relative_path']
     del e['type']
+    if entity_type is EntityTypes.DIRECTORY:
+      e['directory'] = True
   return entities
 
 if __name__ == '__main__':
