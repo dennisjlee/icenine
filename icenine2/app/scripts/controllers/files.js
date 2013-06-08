@@ -12,13 +12,16 @@ function FilesCtrl($scope, $state, $stateParams, $http, $q) {
   var explodedComponents = [], partialPath = '';
   for (var i = 0; i < pathComponents.length; i++) {
     var name = pathComponents[i];
-    partialPath += '/' + name;
-    explodedComponents.push({path: partialPath, name: name});
+    if (name) {
+      partialPath += '/' + name;
+      explodedComponents.push({path: partialPath, name: name});
+    }
   }
   $scope.explodedComponents = explodedComponents;
 
+  var type = $scope.type == 'movies' ? 'movie' : $scope.type;
   $scope.metadata =
-      $http.get('/api/metadata/' + $scope.type + $scope.path)
+      $http.get('/api/metadata/' + type + $scope.path)
           .then(function(response) {
             return response.data;
           });

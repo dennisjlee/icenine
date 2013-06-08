@@ -25,6 +25,7 @@ def index(path):
 @app.route('/components/<path:path>')
 @app.route('/scripts/<path:path>')
 @app.route('/css/<path:path>')
+@app.route('/images/<path:path>')
 @app.route('/views/<path:path>')
 def static_from_root(path):
     return send_from_directory(app.static_folder, request.path[1:])

@@ -4,8 +4,8 @@ import re, sys, getopt
 
 from icenine.ice9 import conf
 from icenine.ice9.models import *
-from MySQLdb.connections import OperationalError
 from pymongo import MongoClient, ASCENDING, DESCENDING
+
 
 def main(args):
   conf.init_config()
